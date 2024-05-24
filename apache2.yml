@@ -1,0 +1,13 @@
+---
+- hosts: ubuntu.my
+  become: yes
+  tasks:
+  -  name: Install apache2
+     apt:
+        name=apache2
+        state=latest
+  handlers:
+  -  name: Start apache2
+     systemd:
+      name: apache2.service
+      enabled: yes

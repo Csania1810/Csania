@@ -1,0 +1,13 @@
+---
+- hosts: ubuntu.my
+  become: yes
+  tasks:
+  -  name: Install nginx
+     apt:
+        name=nginx
+        state=latest
+  handlers:
+  -  name: Start nginx
+     systemd:
+      name: nginx.service
+      enabled: yes

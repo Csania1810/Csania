@@ -1,0 +1,46 @@
+---
+- hosts: openvpn 
+  become: yes
+  tasks:
+  -  name: install EPEL repo
+     yum:
+        name=epel-release
+        state=present
+     when:
+        ansible_os_family == "RedHat"
+  -  name: install openvpn centos
+     yum:
+        name=openvpn
+        state=latest
+     when:
+        ansible_os_family == "RedHat"
+     
+  -  name: Install openvpn on Ubuntu
+     apt:
+        name=openvpn
+        state=latest
+     when:
+        ansible_os_family == "Debian"
+     notify:
+        openvpn systemd
+  
+  -  name: Ensure openvpn Centos is running
+     ansible.builtin.service:
+       name: openvpn-client@client.service
+       state: started
+     when:
+        ansible_os_family == "RedHat"
+       
+  -  name: Ensure openvpn Ubuntu is running
+     ansible.builtin.service:
+       name: openvpn.service
+       state: started
+     when:
+        ansible_os_family == "Debian"
+
+  handlers:
+  -  name: Enabled openvpn
+     systemd:
+      name: openvpn.service
+      enabled: yes
+

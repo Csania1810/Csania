@@ -1,0 +1,14 @@
+---
+- hosts: ubuntu.my
+  become: yes
+  tasks:
+  -  name: Install php
+     apt:
+        name=php
+        state=latest
+  handlers:
+  -  name: Start php
+     systemd:
+      name: php.service
+      enabled: yes
+
